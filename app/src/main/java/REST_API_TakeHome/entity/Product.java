@@ -1,7 +1,5 @@
 package REST_API_TakeHome.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;

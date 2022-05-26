@@ -1,6 +1,4 @@
-
 package REST_API_TakeHome.exceptions;
-
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
