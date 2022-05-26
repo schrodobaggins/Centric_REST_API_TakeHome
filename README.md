@@ -25,3 +25,24 @@ Filter & Pagination: `http://localhost:8080/v1/products?page={#NUMBER}&max={#NUM
 
 
 ## Screenshots
+
+GET
+<p>
+  <img width="400" src="https://i.imgur.com/crgG8iU.png" alt="GET">
+</p>  
+
+POST
+<p>
+  <img width="400" src="https://i.imgur.com/hSv6HUI.png" alt="GET">
+</p>  
+
+PAGINATION
+<p>
+  <img width="400" src="https://i.imgur.com/Ow1phlJ.png" alt="GET">
+</p>  
+
+
+Tests
+<p>
+  <img width="400" src="https://i.imgur.com/5eXtuiG.png" alt="GET">
+</p>  
