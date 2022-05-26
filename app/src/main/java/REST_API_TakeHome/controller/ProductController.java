@@ -34,7 +34,9 @@ public class ProductController {
     ProductRepository productRepository;
 
     /**
-     * GET requests at /v1/products
+     * GET endpoint at /v1/products
+     * defaultValue retrieves every product by default
+     * Pagination/Sorting occurs when defaultValue is modified
      */
     @GetMapping
     public ResponseEntity<Map<String, Object>> findAllProductsByCategory(
@@ -45,11 +47,10 @@ public class ProductController {
 
         try {
             List<Product> products;
-
             Pageable productPagination = PageRequest.of(
                     pageNum - 1,
                     maxEntries,
-                    Sort.by("createdAt").ascending()
+                    Sort.by("createdAt").descending()
             );
             Page<Product> productPage;
             if (category.equals("all")) {
@@ -58,18 +59,19 @@ public class ProductController {
                 productPage = productRepository.findAllByCategory(category, productPagination);
             }
             products = productPage.getContent();
-
             jsonResponse.put("status", HttpStatus.OK);
             jsonResponse.put("data", products);
+
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception exceptionMessage) {
             jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
             jsonResponse.put("error", exceptionMessage.getClass().getName());
+
             return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     /**
-     * POST requests at /v1/products
+     * POST endpoint at /v1/products
      */
     @PostMapping
     public ResponseEntity<Map<String, Object>> insertProduct(@RequestBody Product product) {
@@ -79,10 +81,12 @@ public class ProductController {
             Product newProduct = productRepository.save(product);
             jsonResponse.put("status", HttpStatus.CREATED);
             jsonResponse.put("data", newProduct);
+
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception exceptionMessage) {
             jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
             jsonResponse.put("error", exceptionMessage.getClass().getName());
+
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
