@@ -15,14 +15,16 @@ This project also supports CLI installation using Gradle
 ## Program supports:
 
 
-Create New Product (POST): `http://localhost:8080/v1/products`
+Create New Product (POST): `curl --location --request POST http://localhost:8080/v1/products`
 
 
-View Products (GET): `http://localhost:8080/v1/products`
+View Products (GET): `curl --location --request GET http://localhost:8080/v1/products`
 
 
-Filter & Pagination: `http://localhost:8080/v1/products?page={#NUMBER}&max={#NUMBER}`
+Filter & Pagination: `curl --location --request GET http://localhost:8080/v1/products?page={#NUMBER}&max={#NUMBER}`
 
+
+Or use the program, 'POSTMAN' as indicated below with screenshots.
 
 ## Screenshots
 
@@ -43,7 +45,7 @@ PAGINATION
 
 
 ## Tests
-6 tests were created to test various features of the REST API endpoints and functions. 
+6 tests were created to test various features of the REST API endpoints and functions.
 <p>
   <img width="400" src="https://i.imgur.com/5eXtuiG.png" alt="GET">
 </p>  
