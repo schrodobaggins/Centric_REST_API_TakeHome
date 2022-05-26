@@ -42,7 +42,8 @@ PAGINATION
 </p>  
 
 
-Tests
+## Tests
+6 tests were created to test various features of the REST API endpoints and functions. 
 <p>
   <img width="400" src="https://i.imgur.com/5eXtuiG.png" alt="GET">
 </p>  
