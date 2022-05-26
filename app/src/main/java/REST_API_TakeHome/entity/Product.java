@@ -42,4 +42,22 @@ public class Product {
         this.category = category;
         this.createdAt = createdAt;
     }
+    
+    public UUID getId() { return id; }
+
+    public String getName() { return name; }
+
+    public String getDescription() { return description; }
+
+    public String getBrand() { return brand; }
+
+    public List<String> getTags() { return tags; }
+
+    public String getCategory() { return category; }
+
+    public String getCreatedAt() { return createdAt; }
+
+    public void setId(UUID id) { this.id = id; }
+
+    public void setCreatedAt(String created_at) { this.createdAt = created_at; }
 }
