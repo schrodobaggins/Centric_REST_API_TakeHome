@@ -62,9 +62,9 @@ public class ProductController {
             jsonResponse.put("status", HttpStatus.OK);
             jsonResponse.put("data", products);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (Exception exceptionMessage) {
             jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            jsonResponse.put("error", e.getClass().getName());
+            jsonResponse.put("error", exceptionMessage.getClass().getName());
             return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -80,9 +80,9 @@ public class ProductController {
             jsonResponse.put("status", HttpStatus.CREATED);
             jsonResponse.put("data", newProduct);
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (Exception exceptionMessage) {
             jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            jsonResponse.put("error", e.getClass().getName());
+            jsonResponse.put("error", exceptionMessage.getClass().getName());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
