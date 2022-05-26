@@ -79,8 +79,6 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.data[*].category").value("apparel"));
     }
 
-
-
     @Test
     @Order(2)
     public void insertMany() throws Exception {
@@ -120,6 +118,7 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(numToInsert + 1));
     }
+
     @Test
     @Order(3)
     public void testNullInput() throws Exception {
@@ -148,6 +147,7 @@ public class ProductControllerTest {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isNotFound());
     }
+
     @Test
     @Order(4)
     void testViewAll() throws Exception{
@@ -156,4 +156,41 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }
+
+    @Test
+    @Order(5)
+    public void categorySort() throws Exception {
+        Product product;
+
+        UUID uuid = UUID.randomUUID();
+        List<String> tags = Arrays.asList("blue", "shirt", "slim fit");
+        String createdAt = Utilities.getCurrentDate();
+        product = new Product(
+                uuid,
+                "Blue shirt",
+                "Blue hugo boss shirt",
+                "Hugo Boss",
+                tags,
+                "apparel",
+                createdAt
+        );
+
+        mvc.perform(
+                        post("/v1/products")
+                                .content(Utilities.getJsonString(product))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        mvc.perform(
+                        get("/v1/products?category=apparel")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].category").value("apparel"))
+                .andExpect(jsonPath("$.data[1].category").value("apparel"))
+                .andExpect(jsonPath("$.data.length()").value(2));
+    }
+
 }
