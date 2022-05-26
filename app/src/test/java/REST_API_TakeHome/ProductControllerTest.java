@@ -193,4 +193,22 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.data.length()").value(2));
     }
 
+    @Test
+    @Order(6)
+    public void paginationSort() throws Exception {
+        // Pagination and sizing
+        mvc.perform(
+                        get("/v1/products?page=1&max=5")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
+
+        mvc.perform(
+                        get("/v1/products?max=1")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1));
+    }
 }
