@@ -78,4 +78,47 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.data[*].tags").exists())
                 .andExpect(jsonPath("$.data[*].category").value("apparel"));
     }
+
+
+
+    @Test
+    @Order(2)
+    public void insertMany() throws Exception {
+        int numToInsert = 5;
+        for (int i = 1; i <= numToInsert; i++) {
+            Product p;
+
+            UUID uuid = UUID.randomUUID();
+            List<String> tags = Arrays.asList("sports", "cap");
+            String createdAt = Utilities.getCurrentDate();
+            p = new Product(
+                    uuid,
+                    "Hat #" + i,
+                    "Just a normal hat",
+                    "Thrasher",
+                    tags,
+                    "hats",
+                    createdAt
+            );
+
+            mvc.perform(
+                            post("/v1/products")
+                                    .content(Utilities.getJsonString(p))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .accept(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isCreated());
+        }
+
+        // timeout to ensure that POST request goes through
+        TimeUnit.SECONDS.sleep(1);
+
+        mvc.perform(
+                        get("/v1/products")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(numToInsert + 1));
+    }
+
 }
