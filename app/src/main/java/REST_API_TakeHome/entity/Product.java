@@ -42,7 +42,7 @@ public class Product {
         this.category = category;
         this.createdAt = createdAt;
     }
-    
+
     public UUID getId() { return id; }
 
     public String getName() { return name; }
