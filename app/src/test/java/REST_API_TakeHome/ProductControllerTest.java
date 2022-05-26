@@ -148,5 +148,12 @@ public class ProductControllerTest {
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isNotFound());
     }
-
+    @Test
+    @Order(4)
+    void testViewAll() throws Exception{
+        mvc.perform(get("/v1/products")
+                        .accept(MediaType.parseMediaType("application/json")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"));
+    }
 }
