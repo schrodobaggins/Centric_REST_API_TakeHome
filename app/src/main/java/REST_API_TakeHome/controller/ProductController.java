@@ -2,7 +2,7 @@ package REST_API_TakeHome.controller;
 
 import REST_API_TakeHome.entity.Product;
 import REST_API_TakeHome.repository.ProductRepository;
-//import REST_API_TakeHome.Utilities;
+import REST_API_TakeHome.Utilities;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,31 +41,49 @@ public class ProductController {
             @RequestParam(name = "category", defaultValue = "all") @Valid @Pattern(regexp = "\\D*") String category,
             @RequestParam(name = "page", defaultValue = "1") @Valid @Min(1) Integer pageNum,
             @RequestParam(name = "max", defaultValue = "10") @Valid @Min(0) Integer maxEntries) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> jsonResponse = new HashMap<>();
 
         try {
             List<Product> products;
 
-            Pageable productPage = PageRequest.of(
+            Pageable productPagination = PageRequest.of(
                     pageNum - 1,
                     maxEntries,
                     Sort.by("createdAt").ascending()
             );
-            Page<Product> p;
+            Page<Product> productPage;
             if (category.equals("all")) {
-                p = productRepository.findAll(productPage);
+                productPage = productRepository.findAll(productPagination);
             } else {
-                p = productRepository.findAllByCategory(category, productPage);
+                productPage = productRepository.findAllByCategory(category, productPagination);
             }
-            products = p.getContent();
+            products = productPage.getContent();
 
-            response.put("status", HttpStatus.OK);
-            response.put("data", products);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            jsonResponse.put("status", HttpStatus.OK);
+            jsonResponse.put("data", products);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("error", e.getClass().getName());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            jsonResponse.put("error", e.getClass().getName());
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    /**
+     * POST requests at /v1/products
+     */
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> insertProduct(@RequestBody Product product) {
+        Map<String, Object> jsonResponse = new HashMap<>();
+        try {
+            product.setCreatedAt(Utilities.getCurrentDate());
+            Product newProduct = productRepository.save(product);
+            jsonResponse.put("status", HttpStatus.CREATED);
+            jsonResponse.put("data", newProduct);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            jsonResponse.put("error", e.getClass().getName());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
