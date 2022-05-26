@@ -120,5 +120,33 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(numToInsert + 1));
     }
+    @Test
+    @Order(3)
+    public void testNullInput() throws Exception {
+        Product product;
+
+        // Dummy Product for Tests
+        UUID uuid = UUID.randomUUID();
+        List<String> tags = Arrays.asList("red", "shirt", "slim fit");
+        String createdAt = Utilities.getCurrentDate();
+        product = new Product(
+                uuid,
+                "Red Shirt",
+                "Red hugo boss shirt",
+                "Hugo Boss",
+                tags,
+                "apparel",
+                createdAt
+        );
+        mvc.perform(post("/v1/products/input", 42L)
+                        .contentType("application/json")
+                        .param("name", "Red Shirt")
+                        .param("brand", "Hugo Boss")
+                        .param("description", "Red Hugo Boss Shirt")
+                        .param("tags", "red", "shirt")
+                        .param("category", "apparel")
+                        .content(objectMapper.writeValueAsString(product)))
+                .andExpect(status().isNotFound());
+    }
 
 }
