@@ -34,6 +34,27 @@ public class ProductController {
     ProductRepository productRepository;
 
     /**
+     * POST endpoint at /v1/products
+     */
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> insertProduct(@RequestBody Product product) {
+        Map<String, Object> jsonResponse = new HashMap<>();
+        try {
+            product.setCreatedAt(Utilities.getCurrentDate());
+            Product newProduct = productRepository.save(product);
+            jsonResponse.put("status", HttpStatus.CREATED);
+            jsonResponse.put("data", newProduct);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        } catch (Exception exceptionMessage) {
+            jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            jsonResponse.put("error", exceptionMessage.getClass().getName());
+
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * GET endpoint at /v1/products
      * defaultValue retrieves every product by default
      * Pagination/Sorting occurs when defaultValue is modified
@@ -68,26 +89,6 @@ public class ProductController {
             jsonResponse.put("error", exceptionMessage.getClass().getName());
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    /**
-     * POST endpoint at /v1/products
-     */
-    @PostMapping
-    public ResponseEntity<Map<String, Object>> insertProduct(@RequestBody Product product) {
-        Map<String, Object> jsonResponse = new HashMap<>();
-        try {
-            product.setCreatedAt(Utilities.getCurrentDate());
-            Product newProduct = productRepository.save(product);
-            jsonResponse.put("status", HttpStatus.CREATED);
-            jsonResponse.put("data", newProduct);
-
-            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
-        } catch (Exception exceptionMessage) {
-            jsonResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            jsonResponse.put("error", exceptionMessage.getClass().getName());
-
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
